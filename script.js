@@ -1,26 +1,18 @@
 let productos = [
-    {
-        nombre: "Arroz",
-        precio: 1.50,
-        descripcion: "Arroz blanco de primera calidad"
-    },
-    {
-        nombre: "Azúcar",
-        precio: 1.20,
-        descripcion: "Azúcar refinada"
-    }
+    { nombre: "Arroz", precio: 1.50, descripcion: "Arroz blanco de primera calidad" },
+    { nombre: "Azúcar", precio: 1.20, descripcion: "Azúcar refinada" }
 ];
 
 const lista = document.getElementById("lista-productos");
 const btnAgregar = document.getElementById("btnAgregar");
 
-const inputNombre = document.getElementById("nombre");
-const inputPrecio = document.getElementById("precio");
-const inputDescripcion = document.getElementById("descripcion");
+const nombreInput = document.getElementById("nombre");
+const precioInput = document.getElementById("precio");
+const descripcionInput = document.getElementById("descripcion");
 
-let indiceEdicion = null;
+let indiceEditar = -1;
 
-// Renderizar productos
+// Renderizar lista de productos
 function renderizarProductos() {
     lista.innerHTML = "";
 
@@ -38,51 +30,40 @@ function renderizarProductos() {
     });
 }
 
-// Agregar o actualizar producto
+// Agregar o editar producto
 btnAgregar.addEventListener("click", () => {
-    const nombre = inputNombre.value;
-    const precio = inputPrecio.value;
-    const descripcion = inputDescripcion.value;
+    const nombre = nombreInput.value;
+    const precio = precioInput.value;
+    const descripcion = descripcionInput.value;
 
-    if (nombre === "" || precio === "" || descripcion === "") {
-        alert("Complete todos los campos");
-        return;
-    }
-
-    if (indiceEdicion === null) {
-        productos.push({
-            nombre,
-            precio,
-            descripcion
-        });
+    if (indiceEditar === -1) {
+        // Agregar producto al final
+        productos.push({ nombre, precio, descripcion });
     } else {
-        productos[indiceEdicion] = {
-            nombre,
-            precio,
-            descripcion
-        };
-        indiceEdicion = null;
+        // Editar producto
+        productos[indiceEditar] = { nombre, precio, descripcion };
+        indiceEditar = -1;
         btnAgregar.textContent = "Agregar Producto";
     }
 
-    inputNombre.value = "";
-    inputPrecio.value = "";
-    inputDescripcion.value = "";
+    nombreInput.value = "";
+    precioInput.value = "";
+    descripcionInput.value = "";
 
     renderizarProductos();
 });
 
-// Cargar datos para editar
+// Editar producto
 function editarProducto(index) {
     const producto = productos[index];
 
-    inputNombre.value = producto.nombre;
-    inputPrecio.value = producto.precio;
-    inputDescripcion.value = producto.descripcion;
+    nombreInput.value = producto.nombre;
+    precioInput.value = producto.precio;
+    descripcionInput.value = producto.descripcion;
 
-    indiceEdicion = index;
+    indiceEditar = index;
     btnAgregar.textContent = "Actualizar Producto";
 }
 
-// Renderizar al cargar la página
+// Generar productos al cargar la página
 renderizarProductos();
